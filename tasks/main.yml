@@ -1,0 +1,25 @@
+# file: roles/motd/tasks/main.yml
+
+- name: Install figlet for motd banner
+  apt: pkg=figlet
+
+- name: Create motd directories
+  file: path=/etc/update-motd.d/ state=directory
+
+- name: Copy motd header file
+  copy: src=00-header dest=/etc/update-motd.d mode=0755
+
+- name: Copy motd sysinfo file
+  copy: src=10-sysinfo dest=/etc/update-motd.d mode=0755
+
+- name: Copy motd footer file
+  copy: src=90-footer dest=/etc/update-motd.d mode=0755
+
+- name: Delete old motd file
+  file: path=/etc/motd state=absent
+
+- name: Symlink dynamic motd file
+  file: src=/var/run/motd dest=/etc/motd state=link force=yes
+
+
+
